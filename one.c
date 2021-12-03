@@ -8,17 +8,22 @@ int main()
 {
     setlocale(LC_ALL, "Russian");
 
-	FILE* file = fopen("massive.txt", "w");
+	FILE* file = fopen("..\\massive.txt", "w");
 
 	int menu, n, x, y, z; // xzy - побочные
 	int i;
 	unsigned int min, max, keyboard;
 	unsigned int* Massive = 0;
+	unsigned int* Mass = 0;
+	char * fpath;
 
-	printf("Внимание! В этой программе допускается ввод только натуральных чисел!\n");
+	if (file == 0) goto err;
+	
+	printf("Внимание! В этой программе допускается ввод только целых чисел, начиная с нуля, согласно диапазону unsigned int!\n");
 	printf("Добрый день! Это главное меню программы. Как вы хотите осуществить ввод чисел?\n");
 	printf("1. Сгенерировать случайные числа\n");
 	printf("2. Выполнить ввод чисел вручную\n");
+	printf("3. Осуществить открытие файла и перезапись данных из него в новый текстовый файл. (Не доделано!)\n");
 	scanf("%d", &menu);
 
 	if (menu == 1)
@@ -26,14 +31,18 @@ int main()
 		printf("Для генерации чисел необходимо выбрать минимальную и максимальную границы, а также количество генерируемых чисел\n");
 		printf("Пожалуйста, введите минимальную границу\n");
 		scanf("%d", &min);
+		if (min < 0) goto err;
 		printf("Пожалуйста, введите максимальную границу (максимальная граница должна быть больше минимальной!)\n");
 		scanf("%d", &max);
+		if (max < min) goto err;
+		if (max > 65535) goto err;
 		printf("Пожалуйста, введите количество генерируемых чисел\n");
 		scanf("%d", &n);
+		if (n < 0) goto err;
 		system("cls");
 
 		printf("Генерация чисел начинается. Процесс работы будет выводится на экран.");
-		Sleep(3000);
+		Sleep(5000);
 		system("cls");
 
 		Massive = (unsigned int*)malloc(n * sizeof(unsigned int));
@@ -49,35 +58,81 @@ int main()
 
 		printf("Генерация прошла успешно. Чтобы записать полученные данные в файл, нажмите '1', для закрытия пограммы нажмите '2'\n");
 		scanf("%d", &x);
-		if (x = 1)
+
+		if (x == 1) // GEN
 		{
 			for (i = 0; i < n; i++)
 			{
 				fprintf(file, "%d\n", Massive[i]);
 			}
+			if (file != 0)
+			{
+				printf("Запись произошла успешно!\n");
+				goto stop;
+			}
+			else
+			{
+				goto err;
+			}
 		}
-		if (x = 2)
+		if (x == 2)
 		{
 			goto stop;
 		}
+		else
+		{
+			goto err;
+		}
+
 	}
-	if (menu == 2)
+	if (menu == 2) // KLAVA
 	{
 		
         printf("Пожалуйста, введите количество чисел, которое вы собираетесь ввести\n");
 		scanf("%d", &n);
+		if (n < 0) goto err;
 		printf("Осуществите ввод чисел, которые будут записаны в файл\n");
 		for (i = 0; i < n; i++)
 		{
 			scanf_s("%d", &keyboard);
 			fprintf(file, "%d\n", keyboard);
 		}
+		printf("Запись прошла успешно!\n");
+		goto stop;
+	}
+	if (menu == 3) // CHTENIE
+	{
+		printf("Для открытия необходимого файла, вручную укажите к нему полный путь! (Например, 'e:\\folder\\test.txt')\n");
+		scanf_s(" %c", &fpath);
+		FILE* file1 = fopen("%c", "r", fpath);
+		if (file1 = 0) goto err;
+		printf("Запись в файл 'massive.txt' началась!\n");
+		Sleep(1000);
+		fprintf(file, "%c\n", file1);
+
+		if (file != 0)
+		{
+			system("cls");
+			printf("Запись прошла успешно!\n");
+		}
+		else
+		{
+			goto err;
+		}
 		
+	}
+	else
+	{
+	err:
+		system("cls");
+		printf("Произошла неизвестная ошибка! Закрытие программы...\n");
+		Sleep(1000);
+		goto stop;
 	}
 
 stop:
+	fclose(file);
 	free(Massive);
 	system("pause");
 	return 0;
-
 }
