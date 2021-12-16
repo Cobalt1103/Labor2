@@ -6,6 +6,7 @@
 #include <malloc.h>
 #include <time.h>
 #include <stdbool.h>
+#include <math.h>
 
 
 void quickSort(int *numbers, int left, int right)
@@ -48,6 +49,65 @@ void quickSort(int *numbers, int left, int right)
 
 }
 
+void norma1(unsigned int* numbers, int size)
+{
+	int i = 0, kol = 0;
+
+	for (i = 0; i < size; i++)
+	{
+		kol += numbers[i];
+	}
+	printf("Первая норма вектора = %d\n", kol);
+}
+
+void norma2(unsigned int* numbers, int size) 
+{
+	int i = 0, kol = 0;
+
+	for (i = 0; i < size; i++)
+	{
+		kol += pow(numbers[i], 2);
+	}
+	kol = sqrt(kol);
+	printf("Вторая норма вектора = %d\n", kol);
+}
+
+void normaInfinity(unsigned int* numbers, int size)
+{
+	int i = 0, last = 0;
+
+	for (i = 0; i < size; i++)
+	{
+		if (last < numbers[i])
+		{
+			last = numbers[i];
+		}
+	}
+	printf("Бесконечная норма вектора = %d\n", last);
+}
+
+void normir(unsigned int* numbers, int size)
+{
+	int i = 0;
+	double k = 0, x = 0;
+
+	for (i = 0; i < size; i++)
+	{
+		x += pow(numbers[i], 2);
+	}
+
+	x = sqrt(x);
+	x = round(x);
+
+	printf("Результат нормировки:\n");
+	Sleep(2000);
+
+	for (i = 0; i < size; i++)
+	{
+		k = numbers[i] / x;
+		printf("%lf\n", k);
+	}
+}
 
 
 int main()
@@ -59,7 +119,7 @@ menu:
 	clock_t fTimeStart2, fTimeStop2;
 	clock_t fTimeStart3, fTimeStop3;
 
-	int m, m2, i, j, N, y, k, x;
+	int m, m2, m3, i, j, N, y, k, x;
 	char q, s;
 	FILE* file = 0;
 	unsigned char * fdata;
@@ -69,15 +129,16 @@ menu:
 	x = 0;
 	  
     
-    printf("РњРµРЅСЋ РїСЂРѕРіСЂР°РјРјС‹:\n");
-	printf("1. Р’С‹РІРµСЃС‚Рё РґР°РЅРЅС‹Рµ РёР· С„Р°Р№Р»Р° РЅР° СЌРєСЂР°РЅ\n");
-	printf("2. РџРµСЂРµР№С‚Рё РІ РјРµРЅСЋ СЃРѕСЂС‚РёСЂРѕРІРѕРє\n");
-	printf("3. РЎР±СЂРѕСЃ\n");
-	printf("4. Р’С‹С…РѕРґ\n");
+    printf("Меню программы:\n");
+	printf("1. Вывести данные из файла на экран\n");
+	printf("2. Перейти в меню сортировок\n");
+	printf("3. Сброс\n");
+	printf("4. Перейти в меню норм векторов\n");
+	printf("5. Выход\n");
 	scanf("%d", &m);
 	system("cls");
 	
-	// Р‘Р»РѕРє, РІ РєРѕС‚РѕСЂРѕРј РїСЂРѕРёСЃС…РѕРґРёС‚ РїРµСЂРµРІРѕРґ РґР°РЅРЅС‹С… РёР· С„Р°Р№Р»Р° РІ РјР°СЃСЃРёРІ, Р° С‚Р°РєР¶Рµ РїРѕРґСЃС‡С‘С‚ РєРѕР»Р»РёС‡РµСЃС‚РІР° СЌР»РµРјРµРЅС‚РѕРІ
+	// Блок, в котором происходит перевод данных из файла в массив, а также подсчёт колличества элементов
 	
 	
 	
@@ -104,9 +165,9 @@ menu:
 	fclose(file);
 	
 	
-	// Р‘Р»РѕРє, РІ РєРѕС‚РѕСЂРѕРј РїСЂРѕРёСЃС…РѕРґСЏС‚ РґРµР№СЃС‚РІРёСЏ, РёСЃС…РѕРґСЏ РёР· РІС‹Р±РѕСЂР° РІ РјРµРЅСЋ
+	// Блок, в котором происходят действия, исходя из выбора в меню
 	
-	if (m == 4) goto stop;
+	if (m == 5) goto stop;
 	if (m == 1)
 	{
 		fopen_s(&file, "..//massive.txt", "r");
@@ -115,15 +176,15 @@ menu:
 			putchar(q);
 		}
 		fclose(file);
-		printf("Р’С‹РІРѕРґ РїСЂРѕРёР·РѕС€С‘Р» СѓСЃРїРµС€РЅРѕ!\n");
+		printf("Вывод произошёл успешно!\n");
 		goto menu;
 	}
 	if (m == 2)
 	{
-		printf("Р­С‚Рѕ РјРµРЅСЋ СЃРѕСЂС‚РёСЂРѕРІРѕРє. Р’С‹Р±РµСЂРµС‚Рµ РЅСѓР¶РЅС‹Р№ РІР°Рј РІРёРґ СЃРѕСЂС‚РёСЂРѕРІРєРё:\n");
-		printf("1. РџСѓР·С‹СЂСЊРєРѕРј\n");
-		printf("2. Р’СЃС‚Р°РІРєРѕР№\n");
-		printf("3. Р‘С‹СЃС‚СЂР°СЏ\n");
+		printf("Это меню сортировок. Выберете нужный вам вид сортировки:\n");
+		printf("1. Пузырьком\n");
+		printf("2. Вставкой\n");
+		printf("3. Быстрая\n");
 		scanf("%d", &m2);
 		if (m2 == 1)
 		{
@@ -155,11 +216,11 @@ menu:
 			fprintf(ftime, "Bubble sort: %i(ms)", fTimeStop2 - fTimeStart2);
 			fclose(ftime);
 
-			printf("Р РµР·СѓР»СЊС‚Р°С‚ РѕР±СЂР°Р±РѕС‚РєРё:\n");
+			printf("Результат обработки:\n");
 			Sleep(3000);
 			for (i = 0; i < N; i++)
 			{
-				printf("Р§РёСЃР»Рѕ [%d] = %d\n", i, mass[i]);
+				printf("Число [%d] = %d\n", i, mass[i]);
 			}
 			
 			goto menu;
@@ -187,11 +248,11 @@ menu:
 			fprintf(ftime, "Insert sort: %i(ms)", fTimeStop3 - fTimeStart3);
 			fclose(ftime);
 
-			printf("Р РµР·СѓР»СЊС‚Р°С‚ РѕР±СЂР°Р±РѕС‚РєРё:\n");
+			printf("Результат обработки:\n");
 			Sleep(3000);
 			for (i = 0; i < N; i++)
 			{
-				printf("Р§РёСЃР»Рѕ [%d] = %d\n", i, mass[i]);
+				printf("Число [%d] = %d\n", i, mass[i]);
 			}
 			
 			goto menu;
@@ -207,11 +268,11 @@ menu:
 			fprintf(ftime1, "Quick sort: %i(ms)", fTimeStop1 - fTimeStart1);
 			fclose(ftime1);
 
-			printf("Р РµР·СѓР»СЊС‚Р°С‚ РѕР±СЂР°Р±РѕС‚РєРё:\n");
+			printf("Результат обработки:\n");
 			Sleep(3000);
 			for (i = 0; i < N; i++)
 			{
-				printf("Р§РёСЃР»Рѕ [%d] = %d\n", i, mass[i]);
+				printf("Число [%d] = %d\n", i, mass[i]);
 			}
 			
 			goto menu;
@@ -225,11 +286,31 @@ menu:
 		memcpy(mass, mass2, sizeof(unsigned int) * N);
 		goto menu;
 	}
+	if (m == 4)
+	{
+		printf("1. Вычислить первую норму вектора\n");
+		printf("2. Вычислить вторую норму вектора\n");
+		printf("3. Вычислить бесконечную норму вектора\n");
+		printf("4. Вычислить нормировку вектора\n");
+		
+		scanf_s("%d", &m3);
+
+		if (m3 < 1 || m3 > 4)
+		{
+			goto err;
+		}
+		
+		if (m3 == 1) norma1(mass, N); 
+		if (m3 == 2) norma2(mass, N); 
+		if (m3 == 3) normaInfinity(mass, N); 
+		if (m3 == 4) normir(mass, N); 
+		
+	}
 	else
 	{
 		err:
 		system("cls");
-		printf("РџСЂРѕРёР·РѕС€Р»Р° РЅРµРёР·РІРµСЃС‚РЅР°СЏ РѕС€РёР±РєР°! Р—Р°РєСЂС‹С‚РёРµ РїСЂРѕРіСЂР°РјРјС‹...\n");
+		printf("Произошла неизвестная ошибка! Закрытие программы...\n");
 		Sleep(1000);
 		goto stop;
 	}
@@ -237,6 +318,7 @@ menu:
 	
     stop:
 	free(mass);
-	
+	free(mass2);
+	system("pause");
 	return 0;
 }
